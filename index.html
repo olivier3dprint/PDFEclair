@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Éclair — Scanner &amp; OCR</title>
+<meta name="description" content="Scannez vos documents en PDF avec reconnaissance de texte, entièrement hors ligne. Guide complet des fonctionnalités de PDF Éclair.">
+<link rel="icon" href="img/icon-512.png">
+<style>
+  :root {
+    --navy: #102A5C;
+    --navy-light: #1B3D7A;
+    --orange: #F5A623;
+    --bg: #F7F8FB;
+    --text: #1D2433;
+    --muted: #5B6472;
+    --card: #FFFFFF;
+    --border: #E4E7EE;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  a { color: var(--navy-light); }
+  .container { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+  /* Nav */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .container { display: flex; align-items: center; gap: 12px; height: 60px; }
+  nav img { width: 30px; height: 30px; border-radius: 7px; }
+  nav .brand { font-weight: 700; color: var(--navy); }
+  nav .links { margin-left: auto; display: flex; gap: 18px; font-size: 0.92rem; }
+  nav .links a { text-decoration: none; color: var(--text); }
+  nav .links a:hover { color: var(--navy); }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: #fff;
+    padding: 64px 0 56px;
+  }
+  .hero .container { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+  .hero .copy { flex: 1 1 380px; }
+  .hero h1 { font-size: 2.1rem; margin: 0 0 14px; line-height: 1.25; }
+  .hero p.lead { font-size: 1.08rem; opacity: 0.92; margin: 0 0 24px; max-width: 46ch; }
+  .badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+  }
+  .hero .shot { flex: 0 0 auto; }
+  .hero .shot img {
+    width: 220px;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    border: 6px solid #0c2148;
+  }
+
+  section { padding: 56px 0; }
+  section h2 {
+    font-size: 1.5rem;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  section .subtitle { color: var(--muted); margin: 0 0 32px; max-width: 60ch; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 18px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .card .icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 1.02rem; color: var(--navy); }
+  .card p { margin: 0; color: var(--muted); font-size: 0.94rem; }
+
+  .alt { background: #fff; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 22px;
+  }
+  .step { text-align: left; }
+  .step .num {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--navy); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; margin-bottom: 12px;
+  }
+  .step h3 { margin: 0 0 6px; font-size: 1rem; color: var(--navy); }
+  .step p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+
+  .gallery {
+    display: flex; gap: 18px; overflow-x: auto; padding: 6px 2px 18px;
+    scroll-snap-type: x mandatory;
+  }
+  .gallery img {
+    height: 420px; border-radius: 14px; border: 1px solid var(--border);
+    scroll-snap-align: start; flex: 0 0 auto;
+    box-shadow: 0 8px 24px rgba(16,42,92,0.12);
+  }
+
+  .modes-table { width: 100%; border-collapse: collapse; font-size: 0.94rem; }
+  .modes-table th, .modes-table td {
+    text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border);
+  }
+  .modes-table th { color: var(--navy); }
+
+  .privacy-box {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 16px;
+    padding: 36px;
+    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+  }
+  .privacy-box .txt { flex: 1 1 380px; }
+  .privacy-box h2 { color: #fff; }
+  .privacy-box p { opacity: 0.9; }
+  .privacy-box a.btn {
+    display: inline-block; margin-top: 10px;
+    background: var(--orange); color: var(--navy);
+    font-weight: 700; text-decoration: none;
+    padding: 10px 20px; border-radius: 10px;
+  }
+
+  details {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  details summary {
+    cursor: pointer; font-weight: 600; color: var(--navy);
+  }
+  details p { color: var(--muted); margin: 10px 0 2px; }
+
+  footer {
+    background: #0c2148;
+    color: rgba(255,255,255,0.75);
+    padding: 34px 0;
+    font-size: 0.88rem;
+  }
+  footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer a { color: #fff; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <img src="img/icon-512.png" alt="">
+    <span class="brand">PDF Éclair</span>
+    <div class="links">
+      <a href="#fonctionnalites">Fonctionnalités</a>
+      <a href="#modes">Modes de capture</a>
+      <a href="#fonctionnement">Fonctionnement</a>
+      <a href="#faq">FAQ</a>
+      <a href="politique-confidentialite.html">Confidentialité</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="copy">
+      <div class="badges">
+        <span class="badge">📴 Documents traités hors ligne</span>
+        <span class="badge">🔒 Aucun compte requis</span>
+      </div>
+      <h1>Scannez vos documents en PDF avec OCR, sans connexion ni compte.</h1>
+      <p class="lead">
+        PDF Éclair transforme votre téléphone en scanner de documents : détection
+        automatique des bords, redressement de la perspective, reconnaissance de texte et
+        export en PDF recherchable — le tout directement sur votre appareil, sans serveur
+        ni collecte de données.
+      </p>
+    </div>
+    <div class="shot">
+      <img src="img/03-retouche-filtres.png" alt="Capture d'écran de l'écran de retouche de PDF Éclair">
+    </div>
+  </div>
+</header>
+
+<section id="fonctionnalites">
+  <div class="container">
+    <h2>Ce que PDF Éclair sait faire</h2>
+    <p class="subtitle">
+      Un pipeline complet, de la photo au document fini, pensé pour fonctionner
+      entièrement en local.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <div class="icon">📷</div>
+        <h3>Capture intelligente</h3>
+        <p>
+          Détection automatique des bords en temps réel, avec un contour affiché en
+          direct et une capture déclenchée dès que le cadrage est stable. Capture en
+          rafale pour enchaîner plusieurs pages sans écran intermédiaire, et alerte en
+          cas de faible luminosité.
+        </p>
+      </div>
+      <div class="card">
+        <div class="icon">✂️</div>
+        <h3>Recadrage et rotation</h3>
+        <p>
+          Ajustement manuel des quatre coins si la détection automatique doit être
+          corrigée, rotation par pas de 90°, et navigation rapide entre les pages d'un
+          même document pendant la retouche.
+        </p>
+      </div>
+      <div class="card">
+        <div class="icon">🎨</div>
+        <h3>Cinq filtres d'image</h3>
+        <p>
+          Couleur, Auto (contraste renforcé), Gris, Noir &amp; blanc à seuillage adaptatif,
+          et Tableau (fond ramené au blanc). Un filtre peut être appliqué à toutes les
+          pages du document en un geste.
+        </p>
+      </div>
+      <div class="card">
+        <div class="icon">💡</div>
+        <h3>Ombres et reflets</h3>
+        <p>
+          Un correcteur dédié atténue un éclairage inégal ou un reflet, réglable en
+          quatre intensités, sans délaver les logos ni les zones déjà claires de la
+          page.
+        </p>
+      </div>
+      <div class="card">
+        <div class="icon">🩹</div>
+        <h3>Gomme magique et annotations</h3>
+        <p>
+          Efface un élément indésirable de la page (gomme magique) et permet d'ajouter
+          des annotations à main levée en trois couleurs, conservées séparément de
+          l'image d'origine.
+        </p>
+      </div>
+      <div class="card">
+        <div class="icon">🔎</div>
+        <h3>OCR hors ligne</h3>
+        <p>
+          Reconnaissance de texte embarquée sur l'appareil (alphabet latin), lancée
+          automatiquement après la capture ou à la demande — aucune image n'est envoyée
+          à un service externe pour être analysée.
+        </p>
+      </div>
+      <div class="card">
+        <div class="icon">📄</div>
+        <h3>Export multi-format</h3>
+        <p>
+          PDF avec couche de texte réellement recherchable et surlignable, JPEG (une
+          image par page), TXT, ou conversion du texte reconnu en document Word (.docx)
+          ou RTF avec mise en page reconstruite.
+        </p>
+      </div>
+      <div class="card">
+        <div class="icon">💧</div>
+        <h3>Filigrane</h3>
+        <p>
+          Filigrane texte personnalisable : quatre dispositions (diagonale, mosaïque,
+          bandeau, pied de page), tailles, couleurs et opacité réglables. Ce qui est
+          prévisualisé à l'écran correspond exactement au fichier exporté.
+        </p>
+      </div>
+      <div class="card">
+        <div class="icon">🗂️</div>
+        <h3>Bibliothèque et organisation</h3>
+        <p>
+          Dossiers, renommage, déplacement, recherche par nom ou par texte déjà reconnu,
+          tri par date ou par nom, réorganisation des pages par glisser-déposer, fusion
+          et scission de documents.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="modes" class="alt">
+  <div class="container">
+    <h2>Un mode de capture par type de document</h2>
+    <p class="subtitle">
+      Chaque mode adapte le cadre-guide, le nombre de clichés, la découpe et le filtre
+      appliqué au type de document scanné.
+    </p>
+    <table class="modes-table">
+      <tr><th>Mode</th><th>Usage</th></tr>
+      <tr><td><strong>Document</strong></td><td>Le mode standard, adapté à toute feuille simple ou multipage.</td></tr>
+      <tr><td><strong>Carte d'identité</strong></td><td>Recto et verso capturés séparément puis réunis automatiquement sur une seule page A4.</td></tr>
+      <tr><td><strong>Livre</strong></td><td>Une seule prise de vue sur une double page ouverte, séparée automatiquement en deux pages à la reliure.</td></tr>
+      <tr><td><strong>Tableau blanc</strong></td><td>Fond éclairci pour une lecture nette des notes, indépendamment de l'éclairage de la salle.</td></tr>
+      <tr><td><strong>Carte de visite</strong></td><td>OCR systématique puis proposition d'une fiche pré-remplie vers l'application Contacts.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="fonctionnement">
+  <div class="container">
+    <h2>Comment ça marche</h2>
+    <p class="subtitle">De la photo au document fini, en quatre étapes.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Cadrez</h3>
+        <p>Ouvrez l'appareil photo dans l'application et visez le document : les bords sont détectés en direct.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Capturez</h3>
+        <p>La photo est prise automatiquement dès que le cadrage est stable, ou manuellement — en rafale pour plusieurs pages.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Retouchez</h3>
+        <p>Ajustez le recadrage, appliquez un filtre, corrigez l'éclairage ou ajoutez une annotation si besoin.</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <h3>Exportez</h3>
+        <p>PDF recherchable, JPEG, TXT ou Word — avec filigrane optionnel — enregistré sur l'appareil ou partagé.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <h2>Aperçu de l'application</h2>
+    <p class="subtitle">Captures d'écran réalisées sur des documents d'exemple.</p>
+    <div class="gallery">
+      <img src="img/05-bibliotheque-2-documents.png" alt="Bibliothèque avec deux documents">
+      <img src="img/02-document-2-pages.png" alt="Écran d'un document de deux pages">
+      <img src="img/03-retouche-filtres.png" alt="Écran de retouche et de filtres">
+      <img src="img/04-export-options.png" alt="Options d'export">
+      <img src="img/01-bibliotheque-vide.png" alt="Bibliothèque vide">
+    </div>
+  </div>
+</section>
+
+<section id="confidentialite">
+  <div class="container">
+    <div class="privacy-box">
+      <div class="txt">
+        <h2>Vos documents ne quittent jamais votre téléphone</h2>
+        <p>
+          Pas de serveur, pas de compte : la capture, la retouche, l'OCR et l'export
+          restent entièrement locaux. La version gratuite affiche des publicités
+          (Google AdMob), sans lien avec vos documents. Le détail
+          complet est dans la politique de confidentialité.
+        </p>
+        <a class="btn" href="politique-confidentialite.html">Lire la politique de confidentialité</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <h2>Questions fréquentes</h2>
+    <details>
+      <summary>Faut-il une connexion internet pour utiliser PDF Éclair ?</summary>
+      <p>Non. La capture, le traitement d'image, la reconnaissance de texte et l'export fonctionnent entièrement hors ligne, y compris en mode avion.</p>
+    </details>
+    <details>
+      <summary>L'application collecte-t-elle des données ?</summary>
+      <p>Vos documents, non : ni compte, ni serveur, ni système d'analyse d'usage ne les concerne. La version gratuite affiche en revanche des publicités (Google AdMob), qui impliquent la collecte d'un identifiant publicitaire par Google — sans rapport avec vos documents. Voir la <a href="politique-confidentialite.html">politique de confidentialité</a> pour le détail.</p>
+    </details>
+    <details>
+      <summary>Le PDF exporté est-il vraiment recherchable ?</summary>
+      <p>Oui : la reconnaissance de texte génère une couche de texte invisible intégrée au PDF, que l'on peut sélectionner, copier ou surligner dans un lecteur PDF classique — le texte n'est pas qu'affiché à l'écran de l'application.</p>
+    </details>
+    <details>
+      <summary>Quelles langues sont reconnues par l'OCR ?</summary>
+      <p>La reconnaissance de texte couvre actuellement les langues à alphabet latin.</p>
+    </details>
+    <details>
+      <summary>Peut-on fusionner ou scinder des documents après capture ?</summary>
+      <p>Oui, la bibliothèque permet de fusionner plusieurs documents en un seul, d'extraire une sélection de pages vers un nouveau document, et de réorganiser les pages par glisser-déposer.</p>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>PDF Éclair : Scanner &amp; OCR</span>
+    <span><a href="politique-confidentialite.html">Politique de confidentialité</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
