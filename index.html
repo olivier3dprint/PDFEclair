@@ -62,6 +62,15 @@
     padding: 6px 14px;
     font-size: 0.85rem;
   }
+  .store-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--orange); color: var(--navy);
+    font-weight: 700; text-decoration: none;
+    padding: 12px 22px; border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  }
+  .store-btn:hover { filter: brightness(1.05); }
+  .store-btn svg { width: 20px; height: 20px; flex: 0 0 auto; }
   .hero .shot { flex: 0 0 auto; }
   .hero .shot img {
     width: 220px;
@@ -202,6 +211,10 @@
         export en PDF recherchable — le tout directement sur votre appareil, sans serveur
         ni collecte de données.
       </p>
+      <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.pdfeclair.app">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 2.5v19l10-9.5L4 2.5zm11.4 10.8 2.7 2.6-11.5 6.5 8.8-9.1zm0-2.6L6.6 1.6l11.5 6.5-2.7 2.6zm4.1-1.7L22 10.5c.9.6.9 2.4 0 3l-2.5 1.5-3-2.9 3-3.1z"/></svg>
+        Télécharger sur Google Play
+      </a>
     </div>
     <div class="shot">
       <img src="img/03-retouche-filtres.png" alt="Capture d'écran de l'écran de retouche de PDF Éclair">
@@ -410,7 +423,7 @@
 <footer>
   <div class="container">
     <span>PDF Éclair : Scanner &amp; OCR</span>
-    <span><a href="politique-confidentialite.html">Politique de confidentialité</a></span>
+    <span><a href="https://play.google.com/store/apps/details?id=com.pdfeclair.app">Google Play</a> · <a href="politique-confidentialite.html">Politique de confidentialité</a></span>
   </div>
 </footer>
 
